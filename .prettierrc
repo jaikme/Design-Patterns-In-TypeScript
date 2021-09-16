@@ -1,0 +1,16 @@
+{
+  "printWidth": 120,
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "semi": true,
+  "bracketSpacing": true,
+  "singleQuote": true,
+  "overrides": [
+    {
+      "files": "*.ts",
+      "options": {
+        "parser": "typescript"
+      }
+    }
+  ]
+}
