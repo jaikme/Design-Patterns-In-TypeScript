@@ -1,27 +1,28 @@
 /*
-🐝 Chain Of Responsibility
---------------------------
-
-The chain of responsibility pattern is used to process varied requests, each of which may be dealt with by a different handler.
-
-### Example:
+  🐝 Chain Of Responsibility
+  --------------------------
+  The chain of responsibility pattern is used to process varied requests, each of which may be dealt with by a different handler.
 */
 
+/**
+ * Declare que common handler to link all togueter
+ */
 interface Withdrawing {
   withdraw(amount: number): boolean;
 }
 
-interface MoneyPileValues {
+interface DepositValues {
+  // The deposit value amount
   value: number;
+
+  // How many depositis of value
   quantity: number;
+
+  // The next handler
   next?: Withdrawing;
 }
 
-class MoneyPile implements Withdrawing, MoneyPileValues {
-  static init(from: MoneyPileValues) {
-    return new MoneyPile(from.quantity, from.value, from.next);
-  }
-
+class Deposit implements Withdrawing, DepositValues {
   constructor(public value: number, public quantity: number, public next?: Withdrawing) {}
 
   withdraw(amount: number): boolean {
@@ -34,11 +35,7 @@ class MoneyPile implements Withdrawing, MoneyPileValues {
 
     let quantity = this.quantity;
 
-    while (canTakeSomeBill(_amount)) {
-      if (quantity === 0) {
-        break;
-      }
-
+    while (canTakeSomeBill(_amount) && quantity > 0) {
       _amount -= this.value;
       quantity -= 1;
     }
@@ -75,12 +72,11 @@ class ATM implements Withdrawing {
 /*
 ### Usage
 */
-// Create piles of money and link them together 10 < 20 < 50 < 100.**
-const ten = new MoneyPile(10, 6);
-const twenty = new MoneyPile(20, 2, ten);
-const fifty = new MoneyPile(50, 2, twenty);
-// Alternative with named arguments
-const hundred = MoneyPile.init({ value: 100, quantity: 1, next: fifty });
+// Create deposits of money and link them together 10 < 20 < 50 < 100.**
+const ten = new Deposit(10, 6);
+const twenty = new Deposit(20, 2, ten);
+const fifty = new Deposit(50, 2, twenty);
+const hundred = new Deposit(100, 1, fifty);
 
 // Build ATM.
 const atm = new ATM(hundred, fifty, twenty, ten);
